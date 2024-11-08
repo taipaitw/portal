@@ -1,0 +1,85 @@
+<html>
+<head>
+    <title></title>
+    <style>
+        body {
+            margin: 0px;
+            display: grid;
+            place-items: center;
+        }
+        #container {
+            width: 374px;
+            aspect-ratio: 1 / 1;
+        }
+        #banner {
+            position: relative;
+            padding: 20% 15%;
+            box-sizing: border-box;
+            height: 100%;
+        }
+        #text {
+            position: relative;
+            z-index: 5;
+            font-family: elffont;
+            font-size: 36px;
+            height: 100%;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            word-break: keep-all;
+            overflow-wrap: anywhere;
+        }
+        .elfbgimg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="banner">
+            <div id="text"></div>
+            <img class="elfbgimg" src="https://justfont.com/justforfun/img/elf-texture.png" style="z-index: 6;">
+            <img class="elfbgimg" src="https://justfont.com/justforfun/img/elf-bg-light.jpg">
+        </div>
+    </div>
+    <script src="https://justfont.com/justforfun/js/phonic.js"></script>
+    <script>
+        const matchString = (str, e) => {
+            if (!e) return null;
+            for (let i = 0; i < e.length; i++) {
+                if (e[i] === '') continue;
+                const r = e[i].split('/').map(t => t.includes('*') ? t.replace(/\*/g, '.*?') : `^${t}$`);
+                for (const reg of r) {
+                    if (new RegExp(reg).test(str))
+                        return i;
+                }
+            }
+            return null;
+        },
+        toPhonic = str => {
+            const e = str.split('');
+            let result = '';
+            for (let word of e) {
+                const bpmf = phonic[word];
+                if (bpmf)
+                    if (Array.isArray(bpmf)) {
+                        const i = matchString(str, poyin[word]);
+                        result += i? bpmf[i] : bpmf[0];
+                    }
+                    else
+                        result += bpmf;
+                else
+                    result += word;
+            }
+            return result;
+        }
+        document.querySelector('#text').innerText = toPhonic('網站建置中，請拭目以待');
+    </script>
+</body>
+</html>
